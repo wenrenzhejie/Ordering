@@ -8,6 +8,10 @@ from web.controllers.food.Food import route_food
 from web.controllers.member.Member import route_member
 from web.controllers.stat.Stat import route_stat
 
+"""
+拦截器
+"""
+from web.interceptors.AuthInterceptor import *
 
 
 app.register_blueprint(route_static,url_prefix="/static")

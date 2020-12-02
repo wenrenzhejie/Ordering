@@ -2,5 +2,16 @@ DEBUG=True
 SQLALCHEMY_ECHO=True
 SQLALCHEMY_ENCODING="utf-8"
 SERVER_PORT=9000
-SQLALCHEMY_DATABASE_URI='mysql://root:123456@127.0.0.1/flower'
+SQLALCHEMY_DATABASE_URI='mysql://root:123456@127.0.0.1/food_db'
 SQLALCHEMY_TRACK_MODIFICATIONS=False
+JSON_AS_ASCII=False
+
+##过滤url
+IGNORE_URLS = [
+    "^/user/login"
+]
+
+IGNORE_CHECK_LOGIN_URLS = [
+    "^/static",
+    "^/favicon.ico"
+]
