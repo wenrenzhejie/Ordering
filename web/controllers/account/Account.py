@@ -4,6 +4,7 @@ from common.libs.user.Helper import ops_render,iPagination,getCurrentDate
 from common.libs.user.UserService import UserService
 from common.models.User import User
 from common.libs.UrlManager import UrlManager
+from sqlalchemy import or_
 
 from application import app,db
 route_account = Blueprint( 'account_page',__name__ )
@@ -14,6 +15,11 @@ def index():
     query = User.query
     req = request.values
     page = int(req['p']) if ('p' in req and req['p']) else 1
+    if 'mix_kw' in req:
+        rule = or_(User.nickname.ilike("%{0}%".format(req['mix_kw'])), User.mobile.ilike("%{0}%".format(req['mix_kw'])))
+        query = query.filter(rule)
+    if 'status' in req and int(req['status']) > -1:
+        query = query.filter(User.status == int(req['status']))
     page_params = {
         'total': query.count(),
         'page_size': app.config['PAGE_SIZE'],
@@ -24,9 +30,11 @@ def index():
     pages = iPagination(page_params)
     offset = (page - 1) * app.config['PAGE_SIZE']
     limit = app.config['PAGE_SIZE'] * page
-    list = User.query.order_by(User.uid.asc()).all()[offset:limit]
+    list = query.order_by(User.uid.asc()).all()[offset:limit]
     resp["list"] = list
     resp["pages"] = pages
+    resp["search_con"] = req
+    resp['status_mapping'] = app.config['STATUS_MAPPING']
     return ops_render( "account/index.html",context=resp)
 
 @route_account.route( "/info" )
