@@ -34,6 +34,10 @@ def login():
         resp["code"] = -1
         resp["msg"] = "您输入的用户名或密码不正确"
         return jsonify(resp)
+    if user_info.status != 1:
+        resp["code"] = -1
+        resp["msg"] = "账号已被禁用，请联系管理员处理"
+        return jsonify(resp)
     response = make_response(json.dumps(resp))
     response.set_cookie("user","%s#%s"%(UserService.geneAuthCode(user_info),user_info.uid))
     return response

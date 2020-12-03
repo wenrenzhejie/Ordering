@@ -3,6 +3,7 @@ from flask import Blueprint,request,g,redirect,jsonify
 from common.libs.user.Helper import ops_render,iPagination,getCurrentDate
 from common.libs.user.UserService import UserService
 from common.models.User import User
+from common.models.log.AppAccessLog import AppAccessLog
 from common.libs.UrlManager import UrlManager
 from sqlalchemy import or_
 
@@ -48,6 +49,8 @@ def info():
     info = User.query.filter_by(uid=uid).first()
     if not info:
         return redirect(reback)
+    accessLogList = AppAccessLog.query.order_by(AppAccessLog.created_time.desc()).all()[0:5]
+    resp["accessLogList"] = accessLogList
     resp["info"] = info
     return ops_render( "account/info.html",resp)
 
@@ -99,3 +102,39 @@ def set():
     db.session.add(model_user)
     db.session.commit()
     return jsonify(resp)
+
+
+@route_account.route("/ops",methods=["POST"])
+def ops():
+    resp = {'code': 200, 'msg': '操作成功', 'data': {}}
+    req = request.values
+
+    id = req['id'] if 'id' in req else 0
+    act = req['act'] if 'act' in req else ''
+    if not id:
+        resp['code'] = -1
+        resp['msg'] = "请选择要操作的账号"
+        return jsonify(resp)
+
+    if act not in ['remove', 'recover']:
+        resp['code'] = -1
+        resp['msg'] = "操作有误，请重试"
+        return jsonify(resp)
+
+    user_info = User.query.filter_by(uid=id).first()
+    if not user_info:
+        resp['code'] = -1
+        resp['msg'] = "指定账号不存在"
+        return jsonify(resp)
+
+    if act == "remove":
+        user_info.status = 0
+    elif act == "recover":
+        user_info.status = 1
+
+    user_info.update_time = getCurrentDate()
+    db.session.add(user_info)
+    db.session.commit()
+    return jsonify(resp)
+
+

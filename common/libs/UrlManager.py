@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import time
 class UrlManager(object):
     def __init__(self):
         pass
@@ -10,6 +10,6 @@ class UrlManager(object):
 
     @staticmethod
     def buildStaticUrl(path):
-        ver = "%s"%( 22222222 )
+        ver = "%s"%( int(time.time()) )
         path =  "/static" + path + "?ver=" + ver
         return UrlManager.buildUrl( path )

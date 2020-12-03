@@ -12,7 +12,7 @@ from web.controllers.stat.Stat import route_stat
 拦截器
 """
 from web.interceptors.AuthInterceptor import *
-
+from web.interceptors.ErrorInterceptor import *
 
 app.register_blueprint(route_static,url_prefix="/static")
 app.register_blueprint(route_index,url_prefix="/")
