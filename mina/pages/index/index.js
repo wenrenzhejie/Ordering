@@ -15,7 +15,7 @@ Page({
   onLoad:function(){
     wx.setNavigationBarTitle({
       title: app.globalData.shopName
-    })
+    });
   },
   onShow:function(){
 
@@ -27,6 +27,7 @@ Page({
         remind: ''
       });
     }, 1000);
+
     wx.onAccelerometerChange(function(res) {
       var angle = -(res.x*30).toFixed(1);
       if(angle>14){ angle=14; }
@@ -37,5 +38,32 @@ Page({
         });
       }
     });
+  },
+  login:function (e) {
+    if (!e.detail.userInfo){
+      app.alert({"content":"登录失败，请重试"});
+      return;
+    }
+    var data = e.detail.userInfo;
+    wx.login({
+      success:function (res) {
+         if(!res.code){
+              app.alert({"content":"登录失败，请重试"});
+              return
+         }
+         data["code"] = res.code;
+         wx.request({
+          url:"http://127.0.0.1:9000/api/member/login",
+          header:app.getRequestHeader(),
+          method:"POST",
+          data: data,
+          success:function (res) {
+
+          }
+          });
+      }
+    });
+
+
   }
 });

@@ -8,7 +8,8 @@ JSON_AS_ASCII=False
 
 ##过滤url
 IGNORE_URLS = [
-    "^/user/login"
+    "^/user/login",
+    "^/api"
 ]
 
 IGNORE_CHECK_LOGIN_URLS = [
@@ -21,3 +22,10 @@ STATUS_MAPPING = {
 }
 PAGE_SIZE=50
 PAGE_DISPLAY=10
+
+
+
+MINA_APP={
+    "appid":"wx4ef416cbfab4b7c3",
+    "appkey":"6b56c913e3cdc88627f179d72ac30c01"
+}
