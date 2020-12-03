@@ -16,5 +16,5 @@ IGNORE_CHECK_LOGIN_URLS = [
     "^/favicon.ico"
 ]
 
-PAGE_SIZE=50
+PAGE_SIZE=1
 PAGE_DISPLAY=10
