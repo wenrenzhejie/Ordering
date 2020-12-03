@@ -1,4 +1,4 @@
-import hashlib,base64
+import hashlib,base64,random,string
 
 
 class UserService:
@@ -14,3 +14,7 @@ class UserService:
         str = "%s-%s"%(base64.encodebytes(pwd.encode("utf-8")),salt)
         m.update(str.encode("utf-8"))
         return m.hexdigest()
+    @staticmethod
+    def geneSalt(length=16):
+        keylist = [random.choice(string.ascii_letters + string.digits) for _ in range(length)]
+        return "".join(keylist)

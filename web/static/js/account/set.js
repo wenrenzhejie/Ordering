@@ -27,27 +27,27 @@ var account_set_ops = {
             var login_pwd = login_pwd_target.val();
 
             if( nickname.length < 1 ){
-                common_ops.tip( "请输入符合规范的姓名~~",nickname_target );
+                common_ops.tip( "请输入符合规范的姓名",nickname_target );
                 return false;
             }
 
             if( mobile.length < 1 ){
-                common_ops.tip( "请输入符合规范的手机号码~~",mobile_target );
+                common_ops.tip( "请输入符合规范的手机号码",mobile_target );
                 return false;
             }
 
             if(  email.length < 1 ){
-                common_ops.tip( "请输入符合规范的邮箱~~",email_target );
+                common_ops.tip( "请输入符合规范的邮箱",email_target );
                 return false;
             }
 
             if( login_name.length < 1 ){
-                common_ops.tip( "请输入符合规范的登录用户名~~",login_name_target );
+                common_ops.tip( "请输入符合规范的登录用户名",login_name_target );
                 return false;
             }
 
             if( login_pwd.length < 6 ){
-                common_ops.tip( "请输入符合规范的登录密码~~",login_pwd_target );
+                common_ops.tip( "请输入符合规范的登录密码",login_pwd_target );
                 return false;
             }
 
