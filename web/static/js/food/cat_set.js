@@ -18,12 +18,12 @@ var food_cat_set_ops = {
             var weight = weight_target.val();
 
             if( name.length < 1 ){
-                common_ops.tip( "请输入符合规范的分类名称~~",name_target );
+                common_ops.tip( "请输入符合规范的分类名称",name_target );
                 return false;
             }
 
             if( parseInt( weight ) < 1 ){
-                common_ops.tip( "请输入符合规范的权重，并且至少要大于1~~",weight_target );
+                common_ops.tip( "请输入符合规范的权重，并且至少要大于1",weight_target );
                 return false;
             }
 
