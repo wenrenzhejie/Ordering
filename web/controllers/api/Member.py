@@ -3,6 +3,7 @@ from flask import request,jsonify
 from application import app,db
 from common.models.member.Member import Member
 from common.libs.user.Helper import getCurrentDate
+from common.libs.member.MemberService import MemberService
 from common.models.member.OauthMemberBind import OauthMemberBind
 import requests
 import json
@@ -15,12 +16,12 @@ def login():
         resp["code"] = -1
         resp["msg"] = "需要code"
         return jsonify(resp)
+    openid = MemberService.getWeChatOpenId(code)
+    if openid is None:
+        resp["code"] = -1
+        resp["msg"] = "调用微信出错"
+        return jsonify(resp)
 
-    secret="6b56c913e3cdc88627f179d72ac30c01"
-    url="https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code".format(app.config["MINA_APP"]["appid"],app.config[MINA_APP]["appkey"],code)
-    r = requests.get(url)
-    res = json.loads(r.text)
-    openid = res["openid"]
     nickname = req['nickName'] if 'nickName' in req else ''
     sex = req['gender'] if 'gender' in req else 0
     avatar = req['avatarUrl'] if 'avatarUrl' in req else ''
@@ -47,6 +48,31 @@ def login():
 
         bind_info = model_bind
 
+    member_info = Member.query.filter_by(id=bind_info.member_id).first()
+    token = "%s#%s" % (MemberService.geneAuthCode(member_info), member_info.id)
+    resp['data'] = {'token': token}
     return jsonify(resp)
 
-
+@route_api.route("/member/check_reg",methods=["GET","POST"])
+def check_reg():
+    resp = {"code": 200, "msg": "操作成功", "data": {}}
+    req = request.values
+    code = req["code"] if "code" in req else ""
+    if not code or len(code) < 1:
+        resp["code"] = -1
+        resp["msg"] = "需要code"
+        return jsonify(resp)
+    openid = MemberService.getWeChatOpenId(code)
+    if openid is None:
+        resp["code"] = -1
+        resp["msg"] = "调用微信出错"
+        return jsonify(resp)
+    bind_info = OauthMemberBind.query.filter_by(openid=openid, type=1).first()
+    if not bind_info:
+        resp["code"] = -1
+        resp["msg"] = "未绑定"
+        return jsonify(resp)
+    member_info = Member.query.filter_by(id=bind_info.member_id).first()
+    token = "%s#%s" % (MemberService.geneAuthCode(member_info), member_info.id)
+    resp['data'] = {'token': token}
+    return jsonify(resp)
