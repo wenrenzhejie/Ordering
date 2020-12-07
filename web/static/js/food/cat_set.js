@@ -7,7 +7,7 @@ var food_cat_set_ops = {
         $(".wrap_cat_set .save").click(function(){
             var btn_target = $(this);
             if( btn_target.hasClass("disabled") ){
-                common_ops.alert("正在处理!!请不要重复提交~~");
+                common_ops.alert("正在处理!!请不要重复提交");
                 return;
             }
 

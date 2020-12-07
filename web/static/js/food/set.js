@@ -49,7 +49,7 @@ var food_set_ops = {
         $(".wrap_food_set .save").click(function () {
             var btn_target = $(this);
             if (btn_target.hasClass("disabled")) {
-                common_ops.alert("正在处理!!请不要重复提交~~");
+                common_ops.alert("正在处理!!请不要重复提交");
                 return;
             }
 
@@ -71,37 +71,37 @@ var food_set_ops = {
             var tags = $.trim(tags_target.val());
 
             if (parseInt(cat_id) < 1) {
-                common_ops.tip("请选择分类~~", cat_id_target);
+                common_ops.tip("请选择分类", cat_id_target);
                 return;
             }
 
             if (name.length < 1) {
-                common_ops.alert("请输入符合规范的名称~~");
+                common_ops.alert("请输入符合规范的名称");
                 return;
             }
 
             if (parseFloat(price) <= 0) {
-                common_ops.tip("请输入符合规范的售卖价格~~", price_target);
+                common_ops.tip("请输入符合规范的售卖价格", price_target);
                 return;
             }
 
             if ($(".wrap_food_set .pic-each").size() < 1) {
-                common_ops.alert("请上传封面图~~");
+                common_ops.alert("请上传封面图");
                 return;
             }
 
             if (summary.length < 10) {
-                common_ops.tip("请输入描述，并不能少于10个字符~~", price_target);
+                common_ops.tip("请输入描述，并不能少于10个字符", price_target);
                 return;
             }
 
             if (parseInt(stock) < 1) {
-                common_ops.tip("请输入符合规范的库存量~~", stock_target);
+                common_ops.tip("请输入符合规范的库存量", stock_target);
                 return;
             }
 
             if (tags.length < 1) {
-                common_ops.alert("请输入标签，便于搜索~~");
+                common_ops.alert("请输入标签，便于搜索");
                 return;
             }
 

@@ -29,3 +29,29 @@ MINA_APP={
     "appid":"wx4ef416cbfab4b7c3",
     "appkey":"6b56c913e3cdc88627f179d72ac30c01"
 }
+
+UPLOAD = {
+    'ext':[ 'jpg','gif','bmp','jpeg','png' ],
+    'prefix_path':'/web/static/upload/',
+    'prefix_url':'/static/upload/'
+}
+
+APP = {
+    'domain':'http://127.0.0.1:9000'
+}
+
+
+PAY_STATUS_MAPPING = {
+    "1":"已支付",
+    "-8":"待支付",
+    "0":"已关闭"
+}
+
+PAY_STATUS_DISPLAY_MAPPING = {
+    "0":"订单关闭",
+    "1":"支付成功",
+    "-8":"待支付",
+    "-7":"待发货",
+    "-6":"待确认",
+    "-5":"待评价"
+}
