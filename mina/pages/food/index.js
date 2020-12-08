@@ -82,6 +82,9 @@ Page({
         console.log("aaaaaaaaaaaaaaaaa");*/
         this.getBannerAndCat();
     },
+    onShow:function(){
+        this.getBannerAndCat();
+    },
     scroll: function (e) {
         var that = this, scrollTop = that.data.scrollTop;
         that.setData({

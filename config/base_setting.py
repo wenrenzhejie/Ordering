@@ -16,6 +16,11 @@ IGNORE_CHECK_LOGIN_URLS = [
     "^/static",
     "^/favicon.ico"
 ]
+
+API_IGNORE_URLS = [
+    "^/api"
+]
+
 STATUS_MAPPING = {
     "1":"正常",
     "0":"已删除"

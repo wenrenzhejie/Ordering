@@ -14,6 +14,7 @@ from web.controllers.upload.Upload import route_upload
 拦截器
 """
 from web.interceptors.AuthInterceptor import *
+from web.interceptors.ApiAuthInterceptor import *
 from web.interceptors.ErrorInterceptor import *
 
 app.register_blueprint(route_static,url_prefix="/static")
