@@ -106,7 +106,7 @@ def orderCreate():
 	# 	}
 	# }
 	params = {
-		"note": "note",
+		"note": note,
 		'express_address_id': "1",
 		'express_info': {
 			'mobile': "address_info.mobile",
@@ -140,32 +140,38 @@ def orderPay():
 		resp['msg'] = "系统繁忙。请稍后再试~~"
 		return jsonify(resp)
 
-	config_mina = app.config['MINA_APP']
-	notify_url = app.config['APP']['domain'] + config_mina['callback_url']
-
-	target_wechat = WeChatService( merchant_key=config_mina['paykey'] )
-
-	data = {
-		'appid': config_mina['appid'],
-		'mch_id': config_mina['mch_id'],
-		'nonce_str': target_wechat.get_nonce_str(),
-		'body': '订餐',  # 商品描述
-		'out_trade_no': pay_order_info.order_sn,  # 商户订单号
-		'total_fee': int( pay_order_info.total_price * 100 ),
-		'notify_url': notify_url,
-		'trade_type': "JSAPI",
-		'openid': oauth_bind_info.openid
-	}
-
-	pay_info = target_wechat.get_pay_info( pay_data=data)
-
-	#保存prepay_id为了后面发模板消息
-	pay_order_info.prepay_id = pay_info['prepay_id']
-	db.session.add( pay_order_info )
+	pay_order_info.status = 1
+	pay_order_info.express_status = -7
+	pay_order_info.updated_time = getCurrentDate()
+	db.session.add(pay_order_info)
 	db.session.commit()
-
-	resp['data']['pay_info'] = pay_info
 	return jsonify(resp)
+	# config_mina = app.config['MINA_APP']
+	# notify_url = app.config['APP']['domain'] + config_mina['callback_url']
+	#
+	# target_wechat = WeChatService( merchant_key=config_mina['paykey'] )
+	#
+	# data = {
+	# 	'appid': config_mina['appid'],
+	# 	'mch_id': config_mina['mch_id'],
+	# 	'nonce_str': target_wechat.get_nonce_str(),
+	# 	'body': '订餐',  # 商品描述
+	# 	'out_trade_no': pay_order_info.order_sn,  # 商户订单号
+	# 	'total_fee': int( pay_order_info.total_price * 100 ),
+	# 	'notify_url': notify_url,
+	# 	'trade_type': "JSAPI",
+	# 	'openid': oauth_bind_info.openid
+	# }
+	#
+	# pay_info = target_wechat.get_pay_info( pay_data=data)
+	#
+	# #保存prepay_id为了后面发模板消息
+	# pay_order_info.prepay_id = pay_info['prepay_id']
+	# db.session.add( pay_order_info )
+	# db.session.commit()
+	#
+	# resp['data']['pay_info'] = pay_info
+
 
 @route_api.route("/order/callback", methods=[ "POST"])
 def orderCallback():

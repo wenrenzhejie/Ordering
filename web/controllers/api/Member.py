@@ -96,9 +96,10 @@ def memberShare():
 
 @route_api.route("/member/info")
 def memberInfo():
-    resp = {'code': 200, 'msg': '操作成功~', 'data': {}}
+    resp = {'code': 200, 'msg': '操作成功', 'data': {}}
     member_info = g.member_info
     resp['data']['info'] = {
         "nickname":member_info.nickname,
         "avatar_url":member_info.avatar
     }
+    return jsonify(resp)
