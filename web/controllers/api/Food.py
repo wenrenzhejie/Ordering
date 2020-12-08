@@ -3,9 +3,9 @@ from web.controllers.api import route_api
 from  flask import request,jsonify,g
 from common.models.food.FoodCat import FoodCat
 from common.models.food.Food import Food
-# from common.models.member.MemberCart import MemberCart
+from common.models.member.MemberCart import MemberCart
 # from common.models.member.MemberComments import MemberComments
-# from common.models.member.Member import Member
+from common.models.member.Member import Member
 from common.libs.UrlManager import UrlManager
 from common.libs.user.Helper import getCurrentDate,getDictFilterField,selectFilterObj
 from application import app,db
@@ -94,10 +94,10 @@ def foodInfo():
         resp['msg'] = "美食已下架"
         return jsonify(resp)
 
-    # member_info = g.member_info
-    # cart_number = 0
-    # if member_info:
-    #     cart_number = MemberCart.query.filter_by( member_id =  member_info.id ).count()
+    member_info = g.member_info
+    cart_number = 0
+    if member_info:
+        cart_number = MemberCart.query.filter_by( member_id =  member_info.id ).count()
     resp['data']['info'] = {
         "id":food_info.id,
         "name":food_info.name,
@@ -109,7 +109,7 @@ def foodInfo():
         "stock":food_info.stock,
         "pics":[ UrlManager.buildImageUrl( food_info.main_image ) ]
     }
-    # resp['data']['cart_number'] = cart_number
+    resp['data']['cart_number'] = cart_number
     return jsonify(resp)
 
 
