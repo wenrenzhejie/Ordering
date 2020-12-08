@@ -10,7 +10,7 @@ from common.libs.user.Helper import getCurrentDate
 from common.libs.pay.PayService import PayService
 # from common.libs.pay.WeChatService import WeChatService
 from common.libs.member.CartService import CartService
-# from common.models.member.MemberAddress import MemberAddress
+from common.models.member.MemberAddress import MemberAddress
 from common.models.member.OauthMemberBind import OauthMemberBind
 
 
@@ -45,22 +45,14 @@ def orderInfo():
 			data_food_list.append(tmp_data)
 
 	# 获取地址
-	# address_info = MemberAddress.query.filter_by( is_default = 1,member_id = member_info.id,status = 1 ).first()
-	# default_address = ''
-	# if address_info:
-	# 	default_address = {
-	# 		"id": address_info.id,
-	# 		"name": address_info.nickname,
-	# 		"mobile": address_info.mobile,
-	# 		"address":"%s%s%s%s"%( address_info.province_str,address_info.city_str,address_info.area_str,address_info.address )
-	# 	}
-
-	default_address = {
-			"id": "1",
-			"name": "zs",
-			"mobile": "ssssssss",
-			"address": "%s%s%s%s" % (
-			"河南省", "郑州", "二七区", "sss")
+	address_info = MemberAddress.query.filter_by( is_default = 1,member_id = member_info.id,status = 1 ).first()
+	default_address = ''
+	if address_info:
+		default_address = {
+			"id": address_info.id,
+			"name": address_info.nickname,
+			"mobile": address_info.mobile,
+			"address":"%s%s%s%s"%( address_info.province_str,address_info.city_str,address_info.area_str,address_info.address )
 		}
 
 	resp['data']['food_list'] = data_food_list
@@ -88,33 +80,37 @@ def orderCreate():
 		resp['msg'] = "下单失败：没有选择商品"
 		return jsonify(resp)
 
-	# address_info = MemberAddress.query.filter_by( id = express_address_id ).first()
-	# if not address_info or not address_info.status:
-	# 	resp['code'] = -1
-	# 	resp['msg'] = "下单失败：快递地址不对"
-	# 	return jsonify(resp)
+	address_info = MemberAddress.query.filter_by( id = express_address_id ).first()
+	app.logger.error("aaaaaaaaaaaaaa")
+	app.logger.error(address_info.mobile)
+	app.logger.error(address_info.mobile)
+	app.logger.error("aaaaaaaaaaaaaa")
+	if not address_info or not address_info.status:
+		resp['code'] = -1
+		resp['msg'] = "下单失败：快递地址不对"
+		return jsonify(resp)
 
 	member_info = g.member_info
 	target = PayService()
-	# params = {
-	# 	"note":note,
-	# 	'express_address_id':address_info.id,
-	# 	'express_info':{
-	# 		'mobile':address_info.mobile,
-	# 		'nickname':address_info.nickname,
-	# 		"address":"%s%s%s%s"%( address_info.province_str,address_info.city_str,address_info.area_str,address_info.address )
-	# 	}
-	# }
 	params = {
-		"note": note,
-		'express_address_id': "1",
-		'express_info': {
-			'mobile': "address_info.mobile",
-			'nickname': "address_info.nickname",
-			"address": "%s%s%s%s" % (
-			"address_info.province_str", "address_info.city_str", "address_info.area_str", "address_info.address")
+		"note":note,
+		'express_address_id':address_info.id,
+		'express_info':{
+			'mobile':address_info.mobile,
+			'nickname':address_info.nickname,
+			"address":"%s%s%s%s"%( address_info.province_str,address_info.city_str,address_info.area_str,address_info.address )
 		}
 	}
+	# params = {
+	# 	"note": note,
+	# 	'express_address_id': "1",
+	# 	'express_info': {
+	# 		'mobile': "address_info.mobile",
+	# 		'nickname': "address_info.nickname",
+	# 		"address": "%s%s%s%s" % (
+	# 		"address_info.province_str", "address_info.city_str", "address_info.area_str", "address_info.address")
+	# 	}
+	# }
 	resp = target.createOrder( member_info.id ,items ,params)
 	#如果是来源购物车的，下单成功将下单的商品去掉
 	if resp['code'] == 200 and type == "cart":
