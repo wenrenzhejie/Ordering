@@ -32,13 +32,11 @@ var user_login_ops = {
                     btn_target.removeClass("disabled");
                     var callback = null;
                     if( res.code == 200 ){
-                        alert("登录成功");
-                        window.location.href = common_ops.buildUrl("/");
-                       /* callback = function(){
+                        callback = function(){
                             window.location.href = common_ops.buildUrl("/");
-                        }*/
+                        }
                     }
-                    // common_ops.alert( res.msg,callback );
+                    common_ops.alert( res.msg,callback );
 
                 }
             });

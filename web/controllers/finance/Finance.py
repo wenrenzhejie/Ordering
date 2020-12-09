@@ -20,7 +20,7 @@ def index():
 
     query = PayOrder.query
 
-    if 'status' in req and int( req['status'] ) > -1 :
+    if 'status' in req:
         query = query.filter( PayOrder.status == int( req['status'] ) )
 
     page_params = {
